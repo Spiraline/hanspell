@@ -10,29 +10,35 @@ class SpellCheckerTests(unittest.TestCase):
         pass
 
     def test_basic_check(self):
-        result = spell_checker.check(u'안녕 하세요. 저는 한국인 입니다. 이문장은 한글로 작성됬습니다.')
+        result = spell_checker.check(
+            "안녕 하세요. 저는 한국인 입니다. 이문장은 한글로 작성됬습니다."
+        )
 
         assert result.errors == 4
-        assert result.checked == u'안녕하세요. 저는 한국인입니다. 이 문장은 한글로 작성됐습니다.'
+        assert (
+            result.checked
+            == "안녕하세요. 저는 한국인입니다. 이 문장은 한글로 작성됐습니다."
+        )
 
     def test_words(self):
-        result = spell_checker.check(u'한아이가 장난깜을 갖고놀고있다. 그만하게 할가?')
+        result = spell_checker.check("한아이가 장난깜을 갖고놀고있다. 그만하게 할가?")
+
         assert result.errors == 4
 
         items = result.words
-        assert items[u'한'] == CheckResult.WRONG_SPACING
-        assert items[u'아이가'] == CheckResult.WRONG_SPACING
-        assert items[u'장난감을'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'갖고'] == CheckResult.WRONG_SPACING
-        assert items[u'놀고'] == CheckResult.WRONG_SPACING
-        assert items[u'있다.'] == CheckResult.WRONG_SPACING
-        assert items[u'그만하게'] == CheckResult.PASSED
-        assert items[u'할까?'] == CheckResult.WRONG_SPELLING
+        assert items["한"] == CheckResult.WRONG_SPACING
+        assert items["아이가"] == CheckResult.WRONG_SPACING
+        assert items["장난감을"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["갖고"] == CheckResult.WRONG_SPACING
+        assert items["놀고"] == CheckResult.WRONG_SPACING
+        assert items["있다."] == CheckResult.WRONG_SPACING
+        assert items["그만하게"] == CheckResult.PASSED
+        assert items["할까?"] == CheckResult.WRONG_SPELLING
 
     def test_list(self):
-        results = spell_checker.check([u'안녕 하세요.', u'저는 한국인 입니다.'])
-        assert results[0].checked == u'안녕하세요.'
-        assert results[1].checked == u'저는 한국인입니다.'
+        results = spell_checker.check(["안녕 하세요.", "저는 한국인 입니다."])
+        assert results[0].checked == "안녕하세요."
+        assert results[1].checked == "저는 한국인입니다."
 
     def test_long_paragraph(self):
         paragraph = trim("""
@@ -45,23 +51,25 @@ class SpellCheckerTests(unittest.TestCase):
         result = spell_checker.check(paragraph)
 
     def test_violet_color(self):
-        result = spell_checker.check(u'회새긴간 작까 김동식 걍심꼬백 뜽 새 소설집 뚜권 출간')
+        result = spell_checker.check(
+            "회새긴간 작까 김동식 걍심꼬백 뜽 새 소설집 뚜권 출간"
+        )
         assert result.errors == 5
 
         items = result.words
-        assert items[u'회생'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'긴'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'간'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'작가'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'김동식'] == CheckResult.PASSED
-        assert items[u'걍심꼬백'] == CheckResult.AMBIGUOUS
-        assert items[u'뜬'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'새'] == CheckResult.PASSED
-        assert items[u'소설집'] == CheckResult.PASSED
-        assert items[u'두'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'권'] == CheckResult.STATISTICAL_CORRECTION
-        assert items[u'출간'] == CheckResult.PASSED
+        assert items["회생"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["긴"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["간"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["작가"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["김동식"] == CheckResult.PASSED
+        assert items["걍심꼬백"] == CheckResult.AMBIGUOUS
+        assert items["뜬"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["새"] == CheckResult.PASSED
+        assert items["소설집"] == CheckResult.PASSED
+        assert items["두"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["권"] == CheckResult.STATISTICAL_CORRECTION
+        assert items["출간"] == CheckResult.PASSED
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
